@@ -182,4 +182,3 @@ Once the pipeline is completed, your application will be deployed to the Kuberne
 - The application should display a simple counter App
 
 ![Application Output](/docs/application-output.PNG)
-  
