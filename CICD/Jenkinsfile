@@ -23,7 +23,7 @@ pipeline {
                         def fullImageName = "${ECR_REPO}:${branchTag}"
                         env.IMAGE_URI = fullImageName
 
-                        sh '''
+                        sh """
                             aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REPO
                             echo "Building Docker image..."
                             docker build -t $IMAGE_NAME -f ./application/Dockerfile ./application
@@ -33,7 +33,7 @@ pipeline {
                             docker push $ECR_REPO:$branchTag
                             echo "Replacing image in deployment.yaml..."
                             sed -i 's|IMAGE_PLACEHOLDER|'"$IMAGE_URI"'|' ./k8s/app-deployment.yml
-                        '''
+                        """
             }
         }
         }}
@@ -58,14 +58,14 @@ pipeline {
                 script {
                     def namespace = 'test'
                     echo "Deploying to TEST environment with namespace: $namespace"
-                    sh '''
+                    sh """
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/configmap.yml
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/app-deployment.yml
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/service.yaml
                         kubectl apply -f ./k8s/configmap.yml
                         kubectl apply -f ./k8s/service.yaml
                         kubectl apply -f ./k8s/app-deployment.yml
-                    '''
+                    """
                 }}
             }
         }
@@ -79,14 +79,14 @@ pipeline {
                 script {
                     def namespace = 'prod'
                     echo "Deploying to MAIN environment with namespace: $namespace"
-                    sh '''
+                    sh """
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/configmap.yml
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/app-deployment.yml
                         sed -i 's|NAMESPACE_PLACEHOLDER|$namespace|' ./k8s/service.yaml
                         kubectl apply -f ./k8s/configmap.yml
                         kubectl apply -f ./k8s/service.yaml
                         kubectl apply -f ./k8s/app-deployment.yml
-                    '''
+                    """
                 }}
             }
         }
