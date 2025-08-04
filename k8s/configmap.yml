@@ -6,3 +6,4 @@ metadata:
 data:
   ENVIRONMENT: NAMESPACE_PLACEHOLDER
   REDIS_HOST: redis
+  
