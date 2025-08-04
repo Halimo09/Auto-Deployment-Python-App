@@ -4,5 +4,5 @@ metadata:
   name: app-config
   namespace: NAMESPACE_PLACEHOLDER
 data:
-  ENVIRONMENT: prod
+  ENVIRONMENT: NAMESPACE_PLACEHOLDER
   REDIS_HOST: redis
